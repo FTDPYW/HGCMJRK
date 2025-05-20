@@ -6,7 +6,7 @@ import torch
 import math
 from torch import nn
 from efficient_kan.kan import KAN
-from fastkan import FastKAN as fastKAN
+
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 from layers import VariLengthInputLayer, EncodeLayer, FeedForwardLayer

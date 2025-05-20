@@ -78,6 +78,7 @@ def prepare_data(opt):
 
     mi_dis_data = pd.read_csv(opt.data_path + '/mi_dis_mat_2.0.csv', index_col=0)
 
+
     dataset['md_p'] = t.FloatTensor(np.array(mi_dis_data))
     dataset['md_true'] = dataset['md_p']
 

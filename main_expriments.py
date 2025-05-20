@@ -20,13 +20,13 @@ warnings.filterwarnings('ignore')
 device = torch.device("cuda:0")
 
 
+
 def train_epoch(model, train_data, optim, opt,obtaini):
     model.train()
     regression_crit = Myloss()
 
     one_index = train_data[2][0].to(device).t().tolist()
     zero_index = train_data[2][1].to(device).t().tolist()
-
     dis_sim_integrate_tensor = train_data[0].to(device)
     mi_sim_integrate_tensor = train_data[1].to(device)
 
@@ -52,6 +52,8 @@ def train_epoch(model, train_data, optim, opt,obtaini):
     G_dis_Km = ConstructHW.constructHW_kmean(concat_dis_tensor.detach().cpu().numpy(), clusters=[7])
     G_dis_Kn = G_dis_Kn.to(device)
     G_dis_Km = G_dis_Km.to(device)
+
+
 
     for epoch in range(1, opt.epoch + 1):
         score, mi_cl_loss, dis_cl_loss = model(concat_mi_tensor, concat_dis_tensor,
@@ -117,7 +119,7 @@ def evaluate(true_one, true_zero, pre_one, pre_zero):
 def main(opt):
     dataset = prepare_data(opt)
     train_data = Dataset(opt, dataset)
-
+    print(train_data)
     metrics_cross = np.zeros((1, 7))
 
     # # # 创建列表来保存所有折的真实标签和预测值
@@ -134,7 +136,7 @@ def main(opt):
         model.to(device)
 
         optimizer = optim.AdamW(model.parameters(), lr=0.0001)
-        true_score_one, true_score_zero, pre_score_one, pre_score_zero = train_epoch(model, train_data[i], optimizer,
+        true_score_one, true_score_zero, pre_score_one, pre_score_zero = train_epoch(model, train_data[i],optimizer,
                                                                                      opt,i)
 
         # # 保存真实标签和预测值
@@ -149,7 +151,11 @@ def main(opt):
         # all_tprs.append(tpr)
         # all_aucs.append(roc_auc)
 
-
+        #如果需要独立数据集进行测试 求改
+        #    one_index = train_data[6][0].to(device).t().tolist()
+        #    zero_index = train_data[6][1].to(device).t().tolist()
+        #    test_one_index = data[7][0].t().tolist()
+        #   test_zero_index = data[7][1].t().tolist()
 
         metrics_value = evaluate(true_score_one, true_score_zero, pre_score_one, pre_score_zero)
         print("--------- epoch num:------------", i + 1)

@@ -4,7 +4,6 @@ import torch
 import torch.autograd
 import torch.nn as nn
 import torch.nn.functional as F
-from fastkan import FastKAN as KAN
 device = torch.device("cuda:0")
 
 

@@ -6,7 +6,7 @@ import torch
 import math
 from torch import nn
 from efficient_kan.kan import KAN
-from fastkan import FastKAN as fastKAN
+
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 from layers import VariLengthInputLayer, EncodeLayer, FeedForwardLayer
@@ -411,11 +411,11 @@ class HGCLAMIR(nn.Module):
         # 全连接层处理
         x1 = torch.tanh(self.linear_x_1(mi_feature))
         x2 = torch.tanh(self.linear_x_2(x1))
-        # x = torch.relu(self.linear_x_3(x2))
+        # x = torch.tanh(self.linear_x_3(x2))
         x = torch.tanh(self.KAN(x2))
         y1 = torch.tanh(self.linear_y_1(dis_feature))
         y2 = torch.tanh(self.linear_y_2(y1))
-        # y = torch.relu(self.linear_y_3(y2))
+        # y = torch.tanh(self.linear_y_3(y2))
         y =  torch.tanh(self.KAN(y2))
         # 计算最终得分
         score = x.mm(y.t())
